@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { DataService } from './data.service';
+import {NGXLogger} from 'ngx-logger';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'local-trends';
+  title = 'Twitter trends of my location ';
+  cards = {};
+  trends = [];
+
+  constructor(private dataService: DataService,
+              private logger: NGXLogger) { }
+
+
+  ngOnInit() {
+
+    this.dataService.sendGetRequest().subscribe((data: any[])=>{
+      const response = data[0]
+      this.cards = response;
+      this.trends = response.trends;
+    })  
+  }
 }
